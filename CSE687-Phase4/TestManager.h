@@ -52,6 +52,8 @@ public:
 
 	bool RunTest(int aTestNumber);
 
+	bool RunDLL(std::string DLLName, std::string functionName);
+
 	int FindTestNumber(const std::string& aName);
 
 	TestLogger* GetLoggerPtr();

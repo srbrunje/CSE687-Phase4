@@ -89,6 +89,25 @@ void TestClient::StartTest(const std::string& aTestName, const LogLevel aLogLeve
     comm.stop();
 }
 
+void TestClient::StartTest(const std::string& aDLLName, const std::string& aFuncName, const LogLevel aLogLevel)
+{
+    //create the comm connection
+    Comm comm(EndPoint("localhost", 9891), "Send Test Request");
+    comm.start();
+
+    // create the message
+    Message testRequest(_serverEP, _clientEP);
+    testRequest.SetName(aFuncName);
+    testRequest.SetValue("logLevel", (int)aLogLevel);
+
+    testRequest.SetAuthor(aDLLName);
+
+    // send the message
+    _numMsgsSent++;
+    comm.postMessage(testRequest);
+    comm.stop();
+}
+
 // Sends a message to the server to indicate that no more test requests will be comming from this client
 void TestClient::StopTest()
 {

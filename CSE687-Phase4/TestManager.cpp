@@ -27,6 +27,8 @@
 #include <algorithm>
 #include <conio.h>
 
+
+
 using namespace MsgPassingCommunication;
 
 TestManager* TestManager::instance = 0;
@@ -274,6 +276,23 @@ bool TestManager::RunTest(int aTestNumber)
 		return false; // invalid test number for index
 	}
 	const TestResult* result = _tests[aTestNumber].RunTest();
+	TestMSG(*result); // create the message reply and send
+	return true;
+}
+
+
+
+
+
+
+bool TestManager::RunDLL(std::string DLLName, std::string functionName)
+{
+	TestClass test = TestClass();
+
+	//open DLL and run
+
+	
+	const TestResult* result = test.RunDLL(DLLName, functionName);
 	TestMSG(*result); // create the message reply and send
 	return true;
 }
