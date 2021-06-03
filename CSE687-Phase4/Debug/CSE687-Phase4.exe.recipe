@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\utf0163\Documents\Visual Studio 2019\Projects\cse687\CSE687-Phase4\Debug\Cpp11-BlockingQueue.exe</FullPath>
+      <FullPath>C:\Users\utf0163\Source\Repos\CSE687-Phase4\Debug\Cpp11-BlockingQueue.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\utf0163\Documents\Visual Studio 2019\Projects\cse687\CSE687-Phase4\Debug\CSE687-Phase4.exe</FullPath>
+      <FullPath>C:\Users\utf0163\source\repos\CSE687-Phase4\Debug\CSE687-Phase4.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

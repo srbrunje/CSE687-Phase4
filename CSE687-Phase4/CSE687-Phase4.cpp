@@ -48,10 +48,12 @@ int main()
 
     testClient.SetOutputFile("_clientoutput.txt");
 
-    testClient.StartTest("LongRun4", LogLevel::Pass_Fail);
+   // testClient.StartTest("LongRun4", LogLevel::Pass_Fail);
+
+    testClient.StartTest("LongRunTestDLL.dll", "LongRunTest", LogLevel::Pass_Fail);
 
     //request some tests
-    testClient.StartTest("LongRun4", LogLevel::Pass_Fail);
+/*    testClient.StartTest("LongRun4", LogLevel::Pass_Fail);
     testClient.StartTest("LongRun3", LogLevel::Pass_Fail_with_error_message);
     testClient.StartTest("LongRun2", LogLevel::Pass_Fail_with_test_duration);
     testClient.StartTest("LongRun1", LogLevel::Pass_Fail_with_error_message_and_test_duration);
@@ -63,7 +65,9 @@ int main()
     testClient.StartTest("Mul: 4*0=4", LogLevel::Pass_Fail_with_test_duration);
     testClient.StartTest("Sub: 4-0=4", LogLevel::Pass_Fail);
     testClient.StartTest("Div: 4/0=4", LogLevel::Pass_Fail);
+    */
     testClient.StopTest();
+    
 
     //get the results
     testClient.ReportResults();

@@ -37,6 +37,9 @@ public:
 
 
 	void StartTest(const std::string& aTestName, const LogLevel aLogLevel);
+
+	void StartTest(const std::string& aDLLName, const std::string& aFuncName, const LogLevel aLogLevel);
+
 	void StopTest();
 
 	

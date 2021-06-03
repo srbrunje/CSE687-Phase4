@@ -27,6 +27,8 @@
 #include <algorithm>
 #include <conio.h>
 
+
+
 using namespace MsgPassingCommunication;
 
 TestManager* TestManager::instance = 0;
@@ -91,15 +93,16 @@ void TestManager::CreateTest(TestClass::CallableObject aTestMethod,
 }
 
 
-void TestMSG(TestResult aResult)
+void TestMSG(TestResult aResult, EndPoint requestor)
 {
 	Comm comm(EndPoint("localhost", 9892), "TestMSG");
 	comm.start();
-	EndPoint serverEP("localhost", 9893);
+	//EndPoint serverEP("localhost", 9893);
+	//EndPoint serverEP("localhost", aResult.);
 	EndPoint clientEP("localhost", 9892);
 
 	// Create and populate the message
-	Message msg(serverEP, clientEP);
+	Message msg(requestor, clientEP);
 	msg.SetAuthor("Some author");
 	msg.SetTimestamp(timing::GetDateStr()); // uses current time as timestamp
 	msg.SetName(aResult.GetName());
@@ -153,7 +156,7 @@ bool TestManager::ExecuteTests()
 
 		//std::thread r1(TestMSG);
 		//r1.join();
-		TestMSG(r);
+//		TestMSG(r);
 
 		if (result->GetStatus() == TestResult::Status::PASS) {
 			_numPass++;
@@ -268,13 +271,30 @@ void TestManager::ReportResults()
 	}
 }
 
-bool TestManager::RunTest(int aTestNumber)
+bool TestManager::RunTest(int aTestNumber, EndPoint requestor)
 {
 	if (aTestNumber < 0 || aTestNumber >= _tests.size()) {
 		return false; // invalid test number for index
 	}
 	const TestResult* result = _tests[aTestNumber].RunTest();
-	TestMSG(*result); // create the message reply and send
+	TestMSG(*result,requestor); // create the message reply and send
+	return true;
+}
+
+
+
+
+
+
+bool TestManager::RunDLL(std::string DLLName, std::string functionName, EndPoint requestor)
+{
+	TestClass test = TestClass();
+
+	//open DLL and run
+
+	
+	const TestResult* result = test.RunDLL(DLLName, functionName);
+	TestMSG(*result,requestor); // create the message reply and send
 	return true;
 }
 

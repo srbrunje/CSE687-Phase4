@@ -1,0 +1,6 @@
+﻿  pch.cpp
+  dllmain.cpp
+C:\Users\utf0163\Source\Repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\dllmain.cpp(8,1): warning C4273: 'LongRunTest': inconsistent dll linkage
+C:\Users\utf0163\Source\Repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\LongRunTestDLL.h(12,36): message : see previous definition of 'LongRunTest'
+     Creating library C:\Users\utf0163\Source\Repos\CSE687-Phase4\x64\Debug\LongRunTestDLL.lib and object C:\Users\utf0163\Source\Repos\CSE687-Phase4\x64\Debug\LongRunTestDLL.exp
+  LongRunTestDLL.vcxproj -> C:\Users\utf0163\Source\Repos\CSE687-Phase4\x64\Debug\LongRunTestDLL.dll

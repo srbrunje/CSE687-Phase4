@@ -52,10 +52,12 @@ void TestServer::InitilizeTestServer()
 }
 
 
-bool runTest(TestManager* _mgr, int testNumber)
+
+
+bool runTest(TestManager* _mgr, int testNumber, EndPoint requestor)
 {
     if (_mgr == nullptr) _mgr = TestManager::GetInstance();
-    _mgr->RunTest(testNumber);
+    _mgr->RunTest(testNumber,requestor);
     return true;
 }
 
@@ -87,6 +89,21 @@ void ListenerThread(TestManager* _mgr)
         std::cout << "\n  " + comm.name() + " received Test Request: " << msg.GetName() + " From: " +
             msg.GetAuthor();
 
+        if (msg.GetCommand() == "stop")
+        {
+            break;
+        }
+
+        std::string DLLName = msg.GetAuthor();
+        std::string FuncName = msg.GetName();
+
+        EndPoint requester =  msg.GetFrom();
+
+        ThreadPool<4>::CallObj t = [_mgr, DLLName, FuncName,requester]() ->bool { _mgr->RunDLL(DLLName,FuncName,requester); return true; };
+        trpl.workItem(t);
+       
+        /*
+
         //get the test number
         if (_mgr == nullptr) _mgr = TestManager::GetInstance();
         int testNumber = _mgr->FindTestNumber(msg.GetName());
@@ -107,11 +124,9 @@ void ListenerThread(TestManager* _mgr)
            //_mgr->runTest(testNumber);
 
         }
+        */
 
-        if (msg.GetCommand() == "stop")
-        {
-            break;
-        }
+       
 
     }
     trpl.wait();

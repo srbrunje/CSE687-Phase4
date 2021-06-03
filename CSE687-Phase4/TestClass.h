@@ -130,6 +130,8 @@ public:
 	*************************************************************************/
 	const TestResult* RunTest();
 
+	const TestResult* RunDLL(std::string DLLName, std::string funcName);
+
 
 	/*************************************************************************
 	*
