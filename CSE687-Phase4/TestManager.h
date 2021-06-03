@@ -50,9 +50,9 @@ public:
 
 	void ReportResults();
 
-	bool RunTest(int aTestNumber);
+	bool RunTest(int aTestNumber, EndPoint requestor);
 
-	bool RunDLL(std::string DLLName, std::string functionName);
+	bool RunDLL(std::string DLLName, std::string functionName, EndPoint requestor);
 
 	int FindTestNumber(const std::string& aName);
 

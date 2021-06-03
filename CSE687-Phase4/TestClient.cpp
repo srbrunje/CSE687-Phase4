@@ -136,8 +136,9 @@ void TestClient::StartListenerThread()
 // process the replies from the test server
 void TestClient::ProcessReplies()
 {
-    EndPoint listenerServerEP("localhost", 9893);
-    Comm comm(listenerServerEP, "Client Status");
+   // EndPoint listenerServerEP("localhost", 9893);
+    //Comm comm(listenerServerEP, "Client Status");
+    Comm comm(_clientEP, "Client Status");
     comm.start();
 
     Message msg, rply;

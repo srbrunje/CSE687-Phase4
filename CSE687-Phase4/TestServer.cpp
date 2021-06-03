@@ -54,10 +54,10 @@ void TestServer::InitilizeTestServer()
 
 
 
-bool runTest(TestManager* _mgr, int testNumber)
+bool runTest(TestManager* _mgr, int testNumber, EndPoint requestor)
 {
     if (_mgr == nullptr) _mgr = TestManager::GetInstance();
-    _mgr->RunTest(testNumber);
+    _mgr->RunTest(testNumber,requestor);
     return true;
 }
 
@@ -97,7 +97,9 @@ void ListenerThread(TestManager* _mgr)
         std::string DLLName = msg.GetAuthor();
         std::string FuncName = msg.GetName();
 
-        ThreadPool<4>::CallObj t = [_mgr, DLLName, FuncName]() ->bool { _mgr->RunDLL(DLLName,FuncName); return true; };
+        EndPoint requester =  msg.GetFrom();
+
+        ThreadPool<4>::CallObj t = [_mgr, DLLName, FuncName,requester]() ->bool { _mgr->RunDLL(DLLName,FuncName,requester); return true; };
         trpl.workItem(t);
        
         /*
