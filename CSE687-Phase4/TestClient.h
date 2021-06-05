@@ -13,10 +13,11 @@
 #include "ExampleTest.h"
 #include "ClientHandler.h"
 
+
 class TestClient
 {
 public:
-	TestClient(const std::string clientName, const EndPoint clientEP);
+	TestClient(const std::string clientName, const EndPoint clientEP, const EndPoint serverEP);
 
 	void SetClientName(const std::string name);
 
@@ -59,7 +60,10 @@ public:
 		TestLogger _lgr;
 
 		EndPoint _clientEP;
+		EndPoint _txEP;
 		EndPoint _serverEP;
+
+		MsgPassingCommunication::Comm* comm;
 
 };
 

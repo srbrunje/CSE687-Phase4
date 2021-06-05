@@ -2,7 +2,7 @@
 
 using namespace MsgPassingCommunication;
 
-TestClient::TestClient(const std::string clientName, const EndPoint clientEP)
+TestClient::TestClient(const std::string clientName, const EndPoint clientEP, const EndPoint serverEP)
 {
     std::cout << "create test client class\n";    
     _numMsgsSent = 0;
@@ -11,7 +11,11 @@ TestClient::TestClient(const std::string clientName, const EndPoint clientEP)
 
     _clientEP = clientEP;// EndPoint("localhost", _myPort);
 
-    _serverEP = EndPoint("localhost", 9890);
+    _txEP = EndPoint(_clientEP.address,_clientEP.port-1);
+
+    _serverEP = serverEP; // EndPoint("localhost", 9890); //serverEP; 
+
+    
 
     StartListenerThread();
 }
@@ -73,9 +77,10 @@ void TestClient::SetOutputToStream(const bool bOutput)
 void TestClient::StartTest(const std::string& aTestName, const LogLevel aLogLevel)
 {
     //create the comm connection
-    Comm comm(EndPoint("localhost", 9891), "Send Test Request");
+    //Comm comm(EndPoint("localhost", 9891), "Send Test Request");
+    Comm comm(_txEP, "Send Test Request");
     comm.start();
-
+    
     // create the message
     Message testRequest(_serverEP, _clientEP);
     testRequest.SetName(aTestName);
@@ -92,7 +97,7 @@ void TestClient::StartTest(const std::string& aTestName, const LogLevel aLogLeve
 void TestClient::StartTest(const std::string& aDLLName, const std::string& aFuncName, const LogLevel aLogLevel)
 {
     //create the comm connection
-    Comm comm(EndPoint("localhost", 9891), "Send Test Request");
+    Comm comm(_txEP, "Send Test Request");
     comm.start();
 
     // create the message
@@ -112,7 +117,7 @@ void TestClient::StartTest(const std::string& aDLLName, const std::string& aFunc
 void TestClient::StopTest()
 {
     //create the comm connection
-    Comm comm(EndPoint("localhost", 9891), "Send Test Stop Request");
+    Comm comm(_txEP, "Send Test Stop Request");
     comm.start();    
 
     // create the message
@@ -136,9 +141,12 @@ void TestClient::StartListenerThread()
 // process the replies from the test server
 void TestClient::ProcessReplies()
 {
-   // EndPoint listenerServerEP("localhost", 9893);
+    //EndPoint listenerServerEP("localhost", 9893);
+    //EndPoint listenerServerEP(_clientEP.address, _clientEP.port+1);
     //Comm comm(listenerServerEP, "Client Status");
-    Comm comm(_clientEP, "Client Status");
+
+    Comm comm = Comm(_clientEP, "Client Status");
+   // Comm comm(listenerServerEP, "Client Status");
     comm.start();
 
     Message msg, rply;
@@ -151,6 +159,7 @@ void TestClient::ProcessReplies()
         std::cout << "\n" + comm.name() + " received Test Result: " << msg.GetName();
 
         if (msg.GetCommand() == "stop") {
+           // std::cout << "shutting down client listener\n";
             break;
         }
 
