@@ -41,10 +41,11 @@ int main()
     testServer.StartServer();
 
 
-    EndPoint client1EP = EndPoint("localhost", 9891);
+    EndPoint client1EP = EndPoint("localhost", 9892);
+    EndPoint serverEP = EndPoint("localhost", 9890);
 
     //create the client
-    TestClient testClient = TestClient("Client 1", client1EP);
+    TestClient testClient = TestClient("Client 1", client1EP, serverEP);
 
     testClient.SetOutputFile("_clientoutput.txt");
 

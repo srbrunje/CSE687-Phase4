@@ -95,14 +95,13 @@ void TestManager::CreateTest(TestClass::CallableObject aTestMethod,
 
 void TestMSG(TestResult aResult, EndPoint requestor)
 {
-	Comm comm(EndPoint("localhost", 9892), "TestMSG");
+	Comm comm(EndPoint("localhost", 9890), "TestMSG");
 	comm.start();
-	//EndPoint serverEP("localhost", 9893);
-	//EndPoint serverEP("localhost", aResult.);
-	EndPoint clientEP("localhost", 9892);
-
+	EndPoint senderEP("localhost", 9890);
+	//EndPoint reqEP(requestor);
 	// Create and populate the message
-	Message msg(requestor, clientEP);
+	Message msg(requestor, senderEP);
+	//Message msg(reqEP, senderEP);
 	msg.SetAuthor("Some author");
 	msg.SetTimestamp(timing::GetDateStr()); // uses current time as timestamp
 	msg.SetName(aResult.GetName());

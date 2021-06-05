@@ -1,2 +1,5 @@
 ﻿  CSE687-Phase4.cpp
+  TestClient.cpp
+C:\Users\utf0163\source\repos\CSE687-Phase4\CSE687-Phase4\TestClient.cpp(176,29): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   CSE687-Phase4.vcxproj -> C:\Users\utf0163\source\repos\CSE687-Phase4\Debug\CSE687-Phase4.exe
