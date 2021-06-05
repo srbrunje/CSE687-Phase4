@@ -94,12 +94,8 @@ void ListenerThread(TestManager* _mgr)
             break;
         }
 
-        std::string DLLName = msg.GetAuthor();
-        std::string FuncName = msg.GetName();
-
-        EndPoint requester =  msg.GetFrom();
-
-        ThreadPool<4>::CallObj t = [_mgr, DLLName, FuncName,requester]() ->bool { _mgr->RunDLL(DLLName,FuncName,requester); return true; };
+        
+        ThreadPool<4>::CallObj t = [_mgr, msg]() ->bool { _mgr->RunDLL(msg); return true; };
         trpl.workItem(t);
        
         /*
