@@ -283,16 +283,19 @@ bool TestManager::RunTest(int aTestNumber, EndPoint requestor)
 
 
 
-
-
-bool TestManager::RunDLL(std::string DLLName, std::string functionName, EndPoint requestor)
+bool TestManager::RunDLL(Message message)
 {
 	TestClass test = TestClass();
 
 	//open DLL and run
+	std::string DLLName = message.GetAuthor();
+	std::string FuncName = message.GetName();
 
+	EndPoint requestor = message.GetFrom();
 	
-	const TestResult* result = test.RunDLL(DLLName, functionName);
+	test.SetLogLevel((LogLevel)message.GetValue<unsigned int>("logLevel"));
+
+	const TestResult* result = test.RunDLL(DLLName, FuncName);
 	TestMSG(*result,requestor); // create the message reply and send
 	return true;
 }

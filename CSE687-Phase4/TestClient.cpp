@@ -107,6 +107,8 @@ void TestClient::StartTest(const std::string& aDLLName, const std::string& aFunc
 
     testRequest.SetAuthor(aDLLName);
 
+   // std::string t = testRequest.GetBodyStr();
+
     // send the message
     _numMsgsSent++;
     comm.postMessage(testRequest);

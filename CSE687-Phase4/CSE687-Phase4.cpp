@@ -44,35 +44,31 @@ int main()
     EndPoint client1EP = EndPoint("localhost", 9892);
     EndPoint serverEP = EndPoint("localhost", 9890);
 
+    EndPoint client2EP = EndPoint("localhost", 9894);
+
     //create the client
     TestClient testClient = TestClient("Client 1", client1EP, serverEP);
 
     testClient.SetOutputFile("_clientoutput.txt");
 
+    TestClient testClient2 = TestClient("Client 2", client2EP, serverEP);
+
    // testClient.StartTest("LongRun4", LogLevel::Pass_Fail);
 
-    testClient.StartTest("LongRunTestDLL.dll", "LongRunTest", LogLevel::Pass_Fail);
+   testClient.StartTest("LongRunTestDLL.dll", "LongRunTest", LogLevel::Pass_Fail_with_error_message_and_test_duration);
+   testClient.StartTest("LongRunTestDLL.dll", "ShortRunTest", LogLevel::Pass_Fail);
 
-    //request some tests
-/*    testClient.StartTest("LongRun4", LogLevel::Pass_Fail);
-    testClient.StartTest("LongRun3", LogLevel::Pass_Fail_with_error_message);
-    testClient.StartTest("LongRun2", LogLevel::Pass_Fail_with_test_duration);
-    testClient.StartTest("LongRun1", LogLevel::Pass_Fail_with_error_message_and_test_duration);
-    testClient.StartTest("Add: 4+0=4", LogLevel::Pass_Fail_with_error_message);
-    testClient.StartTest("Mul: 4*0=4", LogLevel::Pass_Fail_with_test_duration);
-    testClient.StartTest("Div: 4/0=4", LogLevel::Pass_Fail_with_error_message_and_test_duration);
-    testClient.StartTest("LongRun4", LogLevel::Pass_Fail_with_error_message_and_test_duration);
-    testClient.StartTest("Add: 4+0=4", LogLevel::Pass_Fail_with_error_message);
-    testClient.StartTest("Mul: 4*0=4", LogLevel::Pass_Fail_with_test_duration);
-    testClient.StartTest("Sub: 4-0=4", LogLevel::Pass_Fail);
-    testClient.StartTest("Div: 4/0=4", LogLevel::Pass_Fail);
-    */
+  // testClient2.StartTest("LongRunTestDLL.dll", "LongRunTest", LogLevel::Pass_Fail);
+ //  testClient2.StartTest("LongRunTestDLL.dll", "ShortRunTest", LogLevel::Pass_Fail);
+       
     testClient.StopTest();
+  //  testClient2.StopTest();
     
 
     //get the results
     testClient.ReportResults();
 
+  //  testClient2.ReportResults();
 
     StaticLogger<1>::flush();
     std::cout << "\n  press enter to quit test Harness";

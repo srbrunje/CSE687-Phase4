@@ -52,7 +52,8 @@ public:
 
 	bool RunTest(int aTestNumber, EndPoint requestor);
 
-	bool RunDLL(std::string DLLName, std::string functionName, EndPoint requestor);
+	bool RunDLL(Message message);
+	//bool RunDLL(std::string DLLName, std::string functionName, EndPoint requestor);
 
 	int FindTestNumber(const std::string& aName);
 

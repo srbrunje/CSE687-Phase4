@@ -10,3 +10,6 @@
 
 // Long run test
 extern "C" LONGRUNLIBRARY_API bool LongRunTest();
+
+//short run test
+extern "C" LONGRUNLIBRARY_API bool ShortRunTest();
