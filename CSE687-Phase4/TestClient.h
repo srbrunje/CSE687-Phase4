@@ -36,6 +36,10 @@ public:
 	void SetOutputStream(std::ostream& aStream);
 	void SetOutputToStream(const bool bOutput);
 
+	void SetDllName(std::string& aDllName);
+	void SetFuncName(std::string& aFuncName);
+	void SetLogLevel(const LogLevel aLogLevel);
+
 
 	void StartTest(const std::string& aTestName, const LogLevel aLogLevel);
 
@@ -64,6 +68,10 @@ public:
 		EndPoint _serverEP;
 
 		MsgPassingCommunication::Comm* comm;
+
+		std::string _dllName;
+		std::string _funcName;
+		LogLevel _loglevel;
 
 };
 

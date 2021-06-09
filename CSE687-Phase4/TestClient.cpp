@@ -2,6 +2,7 @@
 
 using namespace MsgPassingCommunication;
 
+
 TestClient::TestClient(const std::string clientName, const EndPoint clientEP, const EndPoint serverEP)
 {
     std::cout << "create test client class\n";    
@@ -72,6 +73,22 @@ void TestClient::SetOutputToStream(const bool bOutput)
 {
     _lgr.SetOutputToStream(bOutput);
 }
+
+
+
+void TestClient::SetDllName(std::string& aDllName) {
+    _dllName = aDllName;
+}
+void TestClient::SetFuncName(std::string& aFuncName) {
+    _funcName = aFuncName;
+}
+
+void TestClient::SetLogLevel(const LogLevel aLogLevel) {
+    _loglevel = aLogLevel;
+}
+
+
+
 
 
 void TestClient::StartTest(const std::string& aTestName, const LogLevel aLogLevel)
@@ -190,3 +207,5 @@ void TestClient::ReportResults()
         _lgr.LogMessage("--------------------------------------------------------------\n\n");
     }
 }
+
+
