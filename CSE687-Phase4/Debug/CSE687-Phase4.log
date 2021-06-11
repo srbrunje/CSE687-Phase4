@@ -1,6 +1,0 @@
-﻿  CSE687-Phase4.cpp
-C:\Users\Leo\source\repos\CSE687-Phase4\CSE687-Phase4\CSE687-Phase4.cpp(89,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Leo\source\repos\CSE687-Phase4\CSE687-Phase4\CSE687-Phase4.cpp(111,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Leo\source\repos\CSE687-Phase4\CSE687-Phase4\CSE687-Phase4.cpp(131,18): warning C4129: 'R': unrecognized character escape sequence
-C:\Users\Leo\source\repos\CSE687-Phase4\CSE687-Phase4\CSE687-Phase4.cpp(146,23): warning C4018: '<': signed/unsigned mismatch
-  CSE687-Phase4.vcxproj -> C:\Users\Leo\Source\Repos\CSE687-Phase4\Debug\CSE687-Phase4.exe

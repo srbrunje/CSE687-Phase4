@@ -1,8 +1,0 @@
-﻿  pch.cpp
-  dllmain.cpp
-C:\Users\Leo\Source\Repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\dllmain.cpp(8,1): warning C4273: 'LongRunTest': inconsistent dll linkage
-C:\Users\Leo\Source\Repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\LongRunTestDLL.h(12,36): message : see previous definition of 'LongRunTest'
-C:\Users\Leo\Source\Repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\dllmain.cpp(25,1): warning C4273: 'ShortRunTest': inconsistent dll linkage
-C:\Users\Leo\Source\Repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\LongRunTestDLL.h(15,36): message : see previous definition of 'ShortRunTest'
-     Creating library C:\Users\Leo\Source\Repos\CSE687-Phase4\Debug\LongRunTestDLL.lib and object C:\Users\Leo\Source\Repos\CSE687-Phase4\Debug\LongRunTestDLL.exp
-  LongRunTestDLL.vcxproj -> C:\Users\Leo\Source\Repos\CSE687-Phase4\Debug\LongRunTestDLL.dll
