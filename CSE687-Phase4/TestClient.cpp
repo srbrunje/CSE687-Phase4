@@ -5,19 +5,12 @@ using namespace MsgPassingCommunication;
 
 TestClient::TestClient(const std::string clientName, const EndPoint clientEP, const EndPoint serverEP)
 {
-    std::cout << "create test client class\n";    
     _numMsgsSent = 0;
     _myName = clientName;
     _myPort = clientEP.port;
-
     _clientEP = clientEP;// EndPoint("localhost", _myPort);
-
     _txEP = EndPoint(_clientEP.address,_clientEP.port-1);
-
     _serverEP = serverEP; // EndPoint("localhost", 9890); //serverEP; 
-
-    
-
     StartListenerThread();
 }
 
@@ -101,7 +94,7 @@ void TestClient::StartTest(const std::string& aTestName, const LogLevel aLogLeve
     // create the message
     Message testRequest(_serverEP, _clientEP);
     testRequest.SetName(aTestName);
-    testRequest.SetValue("logLevel", (int)aLogLevel);
+    testRequest.SetLogLevel(aLogLevel);
 
     testRequest.SetAuthor(_myName);
 
@@ -120,11 +113,8 @@ void TestClient::StartTest(const std::string& aDLLName, const std::string& aFunc
     // create the message
     Message testRequest(_serverEP, _clientEP);
     testRequest.SetName(aFuncName);
-    testRequest.SetValue("logLevel", (int)aLogLevel);
-
-    testRequest.SetAuthor(aDLLName);
-
-   // std::string t = testRequest.GetBodyStr();
+    testRequest.SetDLL(aDLLName);
+    testRequest.SetLogLevel(aLogLevel);
 
     // send the message
     _numMsgsSent++;
@@ -168,8 +158,7 @@ void TestClient::ProcessReplies()
    // Comm comm(listenerServerEP, "Client Status");
     comm.start();
 
-    Message msg, rply;
-    rply.SetName("reply");
+    Message msg;
     size_t count = 0;
     while (true)
     {
@@ -178,7 +167,6 @@ void TestClient::ProcessReplies()
         std::cout << "\n" + comm.name() + " received Test Result: " << msg.GetName();
 
         if (msg.GetCommand() == "stop") {
-           // std::cout << "shutting down client listener\n";
             break;
         }
 

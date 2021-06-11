@@ -35,21 +35,13 @@ struct TestComponents {
 
 };
 
-std::vector<TestComponents> tests;
-
-
-void AddTestClient(std::vector<TestComponents> &tests) {
-
-    
+void AddTestClient(std::vector<TestComponents> &tests) 
+{    
     TestComponents component;
     std::string testName{ "Leo" };
     int choice, clientIP, serverIP{ 9890 }, confirm{ 0 };
 
     while (confirm == 0) {
-
-        std::cout << "TestName: ";
-        std::getline(std::cin, testName);
-        component.testName = testName;
 
         std::cout << "Choose DLL:\n";
         std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll" << std::endl;
@@ -61,23 +53,23 @@ void AddTestClient(std::vector<TestComponents> &tests) {
         std::cin >> choice;
         component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
 
-
+        std::cout << "TestName: ";
+        std::getline(std::cin, testName);
+        component.testName = testName;
+        
         std::cout << "Client IP: ";
         std::cin >> clientIP;
         component.serverEP = EndPoint("localhost", serverIP);
         component.clientEP = EndPoint("localhost", (int)clientIP);
 
-        std::cout << "Will you like to save your changes? [YES = 1, NO = 0]";
+        std::cout << "Would you like to save your changes? [YES = 1, NO = 0]";
         std::cin >> confirm;
 
         std::cin.ignore();
     }
 
     tests.push_back(component);
-
-
     system("pause");
-
 }
 
 
@@ -127,7 +119,6 @@ void ViewTestClients(std::vector<TestComponents>& tests) {
 
 void RunTestClients(std::vector<TestComponents>& tests) {
 
-    int choice{ 0 };
     std::cout << "\RUNNING TESTS\n\n\n";
 
     SocketSystem ss;
@@ -142,30 +133,21 @@ void RunTestClients(std::vector<TestComponents>& tests) {
     TestServer testServer = TestServer();
     testServer.StartServer();
 
-
     for (int x = 0; x < tests.size(); x++) {
 
         TestClient testClient = TestClient(tests[x].testName, tests[x].clientEP, tests[x].serverEP);
         testClient.SetOutputFile("_clientoutput.txt");
-        testClient.StartTest(tests[x].dllName, tests[x].funcName, LogLevel::Pass_Fail_with_error_message_and_test_duration);
-        testClient.StopTest();
+        testClient.StartTest(tests[x].dllName, tests[x].funcName, LogLevel::ALL);
+        //testClient.StopTest();
 
         tests[x].completed = 1;
 
         testClient.ReportResults();
     }
 
-    
-
+    testServer.StopServer();
     StaticLogger<1>::flush();
-    std::cout << "\n  press enter to quit test Harness";
-    _getche();
-
     system("pause");
-
-
-  
-
 }
 
 
@@ -202,7 +184,7 @@ void action(int choice, std::vector<TestComponents> &tests) {
 }
 
 
-int Menu() {
+int Menu(const std::vector<TestComponents>& tests) {
 
     int choice{ 0 };
 
@@ -245,15 +227,14 @@ int Menu() {
 int main() {
 
     int choice{ 0 }; // holds user choice value
+    std::vector<TestComponents> tests;
 
     do {
 
-        choice = Menu();
+        choice = Menu(tests);
         action(choice, tests);
 
     } while (choice != 5);
-
-
 
     return 0;
 }

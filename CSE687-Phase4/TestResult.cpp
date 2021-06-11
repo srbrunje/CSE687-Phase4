@@ -23,11 +23,11 @@
 TestResult::TestResult(const std::string& aName)
 {
 	SetName(aName);
-	SetStatus(Status::NOT_RUN);
+	SetStatus(ResultStatus::NOT_RUN);
 	SetErrorMessage("");
 	SetStartTime(timing::now());
 	SetEndTime(timing::now());
-	SetLogLevel(LogLevel::Pass_Fail);
+	SetLogLevel(LogLevel::STATUS_ONLY);
 }
 
 /** SetName - public
@@ -45,10 +45,10 @@ void TestResult::SetName(const std::string& aName)
  * Parameter 0: a Status enumeration for the test
  * Return: nothing
 */
-void TestResult::SetStatus(const TestResult::Status aStatus)
+void TestResult::SetStatus(const ResultStatus aStatus)
 {
 	_status = aStatus;
-	if (_status == Status::PASS) {
+	if (_status == ResultStatus::PASS) {
 		_errorMessage = ""; // erase any default error messages if it passed
 	}
 }
@@ -112,7 +112,7 @@ std::string TestResult::GetName() const
  * Parameters: none
  * Return: Status enumeration (_status PMV)
 */
-TestResult::Status TestResult::GetStatus() const
+ResultStatus TestResult::GetStatus() const
 {
 	return _status;
 }
@@ -155,7 +155,7 @@ timing::hack TestResult::GetEndTime() const
 */
 double TestResult::GetDuration() const
 {
-	if (_status == Status::NOT_RUN) {	// has not run yet
+	if (_status == ResultStatus::NOT_RUN) {	// has not run yet
 		return -1.0;	// return with some notably erroneous value
 	}
 	return timing::duration_us(_startTime, _endTime);
@@ -179,17 +179,17 @@ LogLevel TestResult::GetLogLevel() const
  * Parameters: a Status to convert
  * Return: std::string describing the given status
 */
-std::string TestResult::StatusToString(Status aStatus)
+std::string TestResult::StatusToString(const ResultStatus aStatus)
 {
 	switch (aStatus)
 	{
-	case TestResult::Status::PASS:
+	case ResultStatus::PASS:
 		return "PASS";
-	case TestResult::Status::FAIL:
+	case ResultStatus::FAIL:
 		return "FAIL";
-	case TestResult::Status::FAIL_EXC:
+	case ResultStatus::FAIL_ERR:
 		return "FAIL WITH EXCEPTION";
-	case TestResult::Status::NOT_RUN: // fall-through
+	case ResultStatus::NOT_RUN: // fall-through
 	default:
 		return "NOT RUN";
 	}

@@ -25,11 +25,7 @@
 class TestManager
 {
 public:
-
-	static TestManager* GetInstance();
-
 	TestManager();
-
 
 	void CreateTest(TestClass::CallableObject aTestMethod,
 		const LogLevel aLogLevel,
@@ -41,26 +37,20 @@ public:
 		const std::string& aName);
 
 
-	bool ExecuteTests();
-
 	bool SetOutputFile(const std::string& aFilePath);
 	void SetOutputStream(std::ostream& aStream);
 	void SetOutputToFile(const bool bOutputToFile);
 	void SetOutputToStream(const bool bOutputToStream);
 
-	void ReportResults();
-
-	bool RunTest(int aTestNumber, EndPoint requestor);
-
-	bool RunDLL(Message message);
-	//bool RunDLL(std::string DLLName, std::string functionName, EndPoint requestor);
 
 	int FindTestNumber(const std::string& aName);
+	bool RunTest(int aTestNumber, EndPoint requestor);
+	bool RunTest(Message message);
+	bool ExecuteTests();
+	void ReportResults();
 
-	TestLogger* GetLoggerPtr();
 
 private:
-	static TestManager*  instance;
 	std::vector<TestClass> _tests;	// series of tests to execute
 	TestLogger _logger;				// the logger to handle logging test results
 	int _numPass;					// number of tests that passed

@@ -68,7 +68,7 @@ void Sender::start()
                 return;
             }
             StaticLogger<1>::write("\n  -- " + sndrName + " send thread sending " + msg.GetName());
-            std::string msgStr = msg.GetBodyStr();
+            std::string msgStr = msg.AsString();
             EndPoint msgTo = msg.GetTo();
 
             if (msgTo.address != lastEP.address || msgTo.port != lastEP.port)

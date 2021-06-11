@@ -18,9 +18,6 @@
     <ClCompile Include="CSE687-Phase4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CallableTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ClientHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -50,7 +47,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utils.h">
+    <ClInclude Include="utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestServer.h">

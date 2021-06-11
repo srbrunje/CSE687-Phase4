@@ -35,7 +35,7 @@
 TestClass::TestClass()
 {
 	_name = "";
-	_logLevel = LogLevel::Pass_Fail;
+	_logLevel = LogLevel::STATUS_ONLY;
 	_testResult = TestResult(_name);
 }
 
@@ -185,7 +185,7 @@ const TestResult* TestClass::RunTest()
 	catch (std::exception& e) {
 		// record exception data in the errMsg local variable		
 		errMsg = e.what();
-		_testResult.SetStatus(TestResult::Status::FAIL_EXC);
+		_testResult.SetStatus(ResultStatus::FAIL_ERR);
 		_testResult.SetErrorMessage(e.what());
 	}
 
@@ -193,11 +193,11 @@ const TestResult* TestClass::RunTest()
 	_testResult.SetEndTime(timing::now());
 
 	// Set result and error message data
-	if (_testResult.GetStatus() != TestResult::Status::FAIL_EXC) {
-		_testResult.SetStatus(success ? TestResult::Status::PASS : TestResult::Status::FAIL);
+	if (_testResult.GetStatus() != ResultStatus::FAIL_ERR) {
+		_testResult.SetStatus(success ? ResultStatus::PASS : ResultStatus::FAIL);
 	}
 
-	if (_testResult.GetStatus() == TestResult::Status::FAIL) {
+	if (_testResult.GetStatus() == ResultStatus::FAIL) {
 		_testResult.SetErrorMessage(_errorMessage); // use error message specified at construction
 	}
 
@@ -296,7 +296,7 @@ const TestResult * TestClass::RunDLL(std::string DLLName, std::string funcName)
 	catch (std::exception& e) {
 		// record exception data in the errMsg local variable		
 		errMsg = e.what();
-		_testResult.SetStatus(TestResult::Status::FAIL_EXC);
+		_testResult.SetStatus(ResultStatus::FAIL_ERR);
 		_testResult.SetErrorMessage(e.what());
 	}
 
@@ -304,11 +304,11 @@ const TestResult * TestClass::RunDLL(std::string DLLName, std::string funcName)
 	_testResult.SetEndTime(timing::now());
 
 	// Set result and error message data
-	if (_testResult.GetStatus() != TestResult::Status::FAIL_EXC) {
-		_testResult.SetStatus(success ? TestResult::Status::PASS : TestResult::Status::FAIL);
+	if (_testResult.GetStatus() != ResultStatus::FAIL_ERR) {
+		_testResult.SetStatus(success ? ResultStatus::PASS : ResultStatus::FAIL);
 	}
 
-	if (_testResult.GetStatus() == TestResult::Status::FAIL) {
+	if (_testResult.GetStatus() == ResultStatus::FAIL) {
 		_testResult.SetErrorMessage(_errorMessage); // use error message specified at construction
 	}
 
