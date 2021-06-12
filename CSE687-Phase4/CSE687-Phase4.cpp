@@ -52,14 +52,37 @@ void AddTestClient(std::vector<TestComponents>& tests) {
         component.testName = testName;
 
         std::cout << "Choose DLL:\n";
-        std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll" << std::endl;
+        std::cout << "1). LongRunTestDLL.dll  ||   2). MathDLL.dll" << std::endl;
         std::cin >> choice;
-        component.dllName = (choice == 1) ? "LongRunTestDLL.dll" : "ShortRunTestDLL.dll";
+        component.dllName = (choice == 1) ? "LongRunTestDLL.dll" : "MathDLL.dll";
 
         std::cout << "Choose FuncName:\n";
-        std::cout << "1). LongRunTest  ||   2). ShortRunTest" << std::endl;
-        std::cin >> choice;
-        component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
+        if (choice == 1)
+        {
+            std::cout << "1). LongRunTest  ||   2). ShortRunTest" << std::endl;
+            std::cin >> choice;
+            component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
+        }
+        else
+        {
+            std::cout << "1). AddOK  ||   2). AddFail || 3). DivZero" << std::endl;
+            std::cin >> choice;
+            switch (choice)
+            {
+            case 1:
+                component.funcName = "AddOK";
+                break;
+            case 2:
+                component.funcName = "AddFail";
+                break;
+            case 3:
+                component.funcName = "DivZero";
+                break;
+            default:
+                component.funcName = "AddOK";
+            }
+
+        }
 
 
         std::cout << "Client IP: ";
@@ -128,9 +151,9 @@ void EditTest(std::vector<TestComponents>& tests) {
             tests[choice].testName = testName;
 
             std::cout << "Choose DLL:\n";
-            std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll" << std::endl;
+            std::cout << "1). LongRunTestDLL.dll  ||   2). MathDLL.dll" << std::endl;
             std::cin >> choice;
-            tests[choice].dllName = (choice == 1) ? "LongRunTestDLL.dll" : "ShortRunTestDLL.dll";
+            tests[choice].dllName = (choice == 1) ? "LongRunTestDLL.dll" : "LongRunTestDLL.dll";
 
             std::cout << "Choose FuncName:\n";
             std::cout << "1). LongRunTest  ||   2). ShortRunTest" << std::endl;
@@ -339,6 +362,11 @@ int Menu() {
 
 
 int main() {
+
+
+    //start the server
+    TestServer testServer = TestServer();
+    testServer.StartServer();
 
     int choice{ 0 }; // holds user choice value
 
