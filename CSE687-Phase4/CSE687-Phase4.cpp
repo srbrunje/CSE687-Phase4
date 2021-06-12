@@ -49,9 +49,9 @@ int main()
     //create the client
     TestClient testClient = TestClient("Client 1", client1EP, serverEP);
 
-    testClient.SetOutputFile("_clientoutput.txt");
+  //  testClient.SetOutputFile("_clientoutput.txt");
 
-    TestClient testClient2 = TestClient("Client 2", client2EP, serverEP);
+  //  TestClient testClient2 = TestClient("Client 2", client2EP, serverEP);
 
    // testClient.StartTest("LongRun4", LogLevel::Pass_Fail);
 
@@ -61,19 +61,21 @@ int main()
   // testClient2.StartTest("LongRunTestDLL.dll", "LongRunTest", LogLevel::Pass_Fail);
  //  testClient2.StartTest("LongRunTestDLL.dll", "ShortRunTest", LogLevel::Pass_Fail);
        
-    testClient.StopTest();
+  //  testClient.StopTest();
   //  testClient2.StopTest();
     
 
     //get the results
     testClient.ReportResults();
-
+//
   //  testClient2.ReportResults();
 
     StaticLogger<1>::flush();
     std::cout << "\n  press enter to quit test Harness";
     _getche();
 
+    //shutdown the server
+    testServer.StopServer();
 
     return 0;
 }
