@@ -141,7 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CallableTest.cpp" />
     <ClCompile Include="ClientHandler.cpp" />
     <ClCompile Include="Comm.cpp" />
     <ClCompile Include="CSE687-Phase4.cpp" />
@@ -176,7 +175,7 @@
     <ClInclude Include="TestManager.h" />
     <ClInclude Include="TestResult.h" />
     <ClInclude Include="TestServer.h" />
-    <ClInclude Include="utils.h" />
+    <ClInclude Include="utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

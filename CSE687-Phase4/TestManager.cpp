@@ -15,7 +15,7 @@
 
 #include "TestManager.h"
 #include "TestClass.h"
-#include "utils.h"
+#include "utils.hpp"
 #include "Comm.h"
 #include <iostream>
 #include <thread>
@@ -31,26 +31,7 @@
 
 using namespace MsgPassingCommunication;
 
-TestManager* TestManager::instance = 0;
 
-TestManager* TestManager::GetInstance()
-{
-	if (!instance)
-	{
-		instance = new TestManager();
-	}
-	return instance;
-}
-
-/*************************************************************************
-	*
-	* Constructor for the TestManager class
-	*
-	* Parameter: 	None
-	*
-	* return:	None
-	*
-	*************************************************************************/
 TestManager::TestManager()
 {
 	// Set _tests to an empty vector and _logger to a default Logger
@@ -65,18 +46,6 @@ TestManager::TestManager()
 }
 
 
-/*************************************************************************
-*
-* Creates a new test
-*
-* Parameter: 	aTestMethod: the test to run
-*				aLogLevel: the level of logging desired
-*				aName: the name of the test
-*				aError: a default error message
-*
-* return:	None
-*
-*************************************************************************/
 void TestManager::CreateTest(TestClass::CallableObject aTestMethod,
 	const LogLevel aLogLevel,
 	const std::string& aName,
@@ -95,21 +64,20 @@ void TestManager::CreateTest(TestClass::CallableObject aTestMethod,
 
 void TestMSG(TestResult aResult, EndPoint requestor)
 {
-	Comm comm(EndPoint("localhost", 9890), "TestMSG");
-	comm.start();
 	EndPoint senderEP("localhost", 9890);
-	//EndPoint reqEP(requestor);
+	Comm comm(senderEP, "TestMSG");
+	comm.start();
+
 	// Create and populate the message
 	Message msg(requestor, senderEP);
-	//Message msg(reqEP, senderEP);
 	msg.SetAuthor("Some author");
 	msg.SetTimestamp(timing::GetDateStr()); // uses current time as timestamp
 	msg.SetName(aResult.GetName());
-	msg.SetValue("status", static_cast<uint8_t>(aResult.GetStatus()));
-	msg.SetValue("errMsg", aResult.GetErrorMessage());
-	msg.SetValue("startTime", timing::toString(aResult.GetStartTime()));
-	msg.SetValue("endTime", timing::toString(aResult.GetEndTime()));
-	msg.SetValue("logLevel", static_cast<uint8_t>(aResult.GetLogLevel()));
+	msg.Set("status", static_cast<enum_t>(aResult.GetStatus()));
+	msg.Set("errMsg", aResult.GetErrorMessage());
+	msg.Set("startTime", timing::toString(aResult.GetStartTime()));
+	msg.Set("endTime", timing::toString(aResult.GetEndTime()));
+	msg.Set("logLevel", static_cast<enum_t>(aResult.GetLogLevel()));
 
 	// send the message
 	comm.postMessage(msg);
@@ -157,10 +125,10 @@ bool TestManager::ExecuteTests()
 		//r1.join();
 //		TestMSG(r);
 
-		if (result->GetStatus() == TestResult::Status::PASS) {
+		if (result->GetStatus() == ResultStatus::PASS) {
 			_numPass++;
 		}
-		else if (result->GetStatus() == TestResult::Status::FAIL_EXC) {
+		else if (result->GetStatus() == ResultStatus::FAIL_ERR) {
 			_numExc++;
 			_numFail++;
 		}
@@ -280,20 +248,18 @@ bool TestManager::RunTest(int aTestNumber, EndPoint requestor)
 	return true;
 }
 
-
-
-
-bool TestManager::RunDLL(Message message)
+bool TestManager::RunTest(Message message)
 {
 	TestClass test = TestClass();
-
-	//open DLL and run
-	std::string DLLName = message.GetAuthor();
+	std::string DLLName = message.GetDLL();
 	std::string FuncName = message.GetName();
-
 	EndPoint requestor = message.GetFrom();
-	
-	test.SetLogLevel((LogLevel)message.GetValue<unsigned int>("logLevel"));
+	test.SetLogLevel((LogLevel)message.Get<enum_t>("logLevel"));
+
+	if (DLLName.empty()) {
+		// No DLL, try and run the built-in function
+		return RunTest(FindTestNumber(FuncName), requestor);
+	}
 
 	const TestResult* result = test.RunDLL(DLLName, FuncName);
 	TestMSG(*result,requestor); // create the message reply and send
@@ -308,9 +274,4 @@ int TestManager::FindTestNumber(const std::string& aName)
 		}
 	}
 	return -1;
-}
-
-TestLogger* TestManager::GetLoggerPtr()
-{
-	return &_logger;
 }

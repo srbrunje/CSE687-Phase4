@@ -19,24 +19,16 @@ public:
 
 	void InitilizeTestServer();
 	void StartServer();
-	void StopServer();
-/*	bool SetOutputFile(const std::string& aFilePath);
-	void SetOutputToFile(const bool bOutput);
-	void SetOutputStream(std::ostream& aStream);
-	void SetOutputToStream(const bool bOutput);
+	void StopServer(const bool bHard = false);
 
-	void StartTest(const std::string& aName,
-		const LogLevel aLogLevel);
-	void StopTest();
-	*/
-	void ProcessReplies();
-	//void ReportResults();
+	const std::string ADDRESS = "localhost";
+	const Port PORT = 9890;
 
 private:
-	
-	TestManager* _mgr;
-	bool _shutdown;
+
+	TestManager _mgr;
 	int _numMsgsSent;
 	BlockingQueue<Message> _msgsRcvd;
+	std::atomic<bool> _shutdown;
 };
 

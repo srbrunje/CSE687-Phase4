@@ -1,6 +1,0 @@
-﻿  dllmain.cpp
-C:\Users\utf0163\source\repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\dllmain.cpp(8,1): warning C4273: 'LongRunTest': inconsistent dll linkage
-C:\Users\utf0163\source\repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\LongRunTestDLL.h(12,36): message : see previous definition of 'LongRunTest'
-C:\Users\utf0163\source\repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\dllmain.cpp(25,1): warning C4273: 'ShortRunTest': inconsistent dll linkage
-C:\Users\utf0163\source\repos\CSE687-Phase4\LongRunTestDLL\LongRunTestDLL\LongRunTestDLL.h(15,36): message : see previous definition of 'ShortRunTest'
-  LongRunTestDLL.vcxproj -> C:\Users\utf0163\source\repos\CSE687-Phase4\Debug\LongRunTestDLL.dll

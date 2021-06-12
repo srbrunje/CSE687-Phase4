@@ -162,16 +162,16 @@ bool TestLogger::LogResult(const TestResult& aTestResult)
 	// a string to contain the data from the TestResult
 	std::string msg = "Test: " + aTestResult.GetName() + "\n";
 
-	TestResult::Status status = aTestResult.GetStatus(); // shorthand
-	if (status == TestResult::Status::PASS) {
+	ResultStatus status = aTestResult.GetStatus(); // shorthand
+	if (status == ResultStatus::PASS) {
 		msg += "Pass/Fail: PASS\n";
 	}
-	else if (status == TestResult::Status::FAIL
-		|| status == TestResult::Status::FAIL_EXC)
+	else if (status == ResultStatus::FAIL
+		|| status == ResultStatus::FAIL_ERR)
 	{
 		msg += "Pass/Fail: FAIL\n";
 	}
-	else { //if (status == TestResult::Status::NOT_RUN)
+	else { //if (status == ResultStatus::NOT_RUN)
 		// Cannot log result, test has not finished yet
 		// TODO: determine if std::cerr is where errors like this should actually go
 		std::cerr << "Unable to log results of test " << aTestResult.GetName()
@@ -181,14 +181,14 @@ bool TestLogger::LogResult(const TestResult& aTestResult)
 
 	// Get the LogLevel-appropriate data and append that to the message
 	LogLevel ll = aTestResult.GetLogLevel(); // shorthand
-	if (ll == LogLevel::Pass_Fail_with_error_message
-		|| ll == LogLevel::Pass_Fail_with_error_message_and_test_duration)
+	if (ll == LogLevel::WITH_ERR
+		|| ll == LogLevel::ALL)
 	{
 		// Record the error messages from the TestResult
 		msg += "Errors: " + aTestResult.GetErrorMessage() + '\n';
 	}
-	if (ll == LogLevel::Pass_Fail_with_test_duration
-		|| ll == LogLevel::Pass_Fail_with_error_message_and_test_duration)
+	if (ll == LogLevel::WITH_DUR
+		|| ll == LogLevel::ALL)
 	{
 		// Record the timing data from the TestResult		
 		msg += "Timing: " + timing::FormatTimeString(aTestResult.GetDuration()) + "\n";
@@ -213,7 +213,7 @@ bool TestLogger::LogResult(const Message& aMsg)
 		return false;
 	}
 
-	if (aMsg.GetValue<uint8_t>("status") >= static_cast<uint8_t>(TestResult::Status::NOT_RUN))
+	if (aMsg.Get<enum_t>("status") >= static_cast<enum_t>(ResultStatus::NOT_RUN))
 	{
 		std::cerr << "Unable to log results of test " << aMsg.GetName()
 			<< ".  Test has not finished yet.\n";
@@ -226,21 +226,21 @@ bool TestLogger::LogResult(const Message& aMsg)
 		+ "\nDestination: " + aMsg.GetTo().toString()
 		+ "\nTimestamp:   " + aMsg.GetTimestamp()
 		+ "\n\nTest Results:"
-		+ "\n     Status: " + TestResult::StatusToString(static_cast<TestResult::Status>(aMsg.GetValue<uint8_t>("status")));
+		+ "\n     Status: " + TestResult::StatusToString(static_cast<ResultStatus>(aMsg.Get<enum_t>("status")));
 	
-	LogLevel ll = (LogLevel)aMsg.GetValue<uint8_t>("logLevel");
-	if (ll == LogLevel::Pass_Fail_with_error_message
-		|| ll == LogLevel::Pass_Fail_with_error_message_and_test_duration)
+	LogLevel ll = (LogLevel)aMsg.Get<enum_t>("logLevel");
+	if (ll == LogLevel::WITH_ERR
+		|| ll == LogLevel::ALL)
 	{
 		// Record the error messages from the TestResult
-		result += "\n     Errors: " + aMsg.GetValue<std::string>("errMsg");
+		result += "\n     Errors: " + aMsg.Get("errMsg");
 	}
-	if (ll == LogLevel::Pass_Fail_with_test_duration
-		|| ll == LogLevel::Pass_Fail_with_error_message_and_test_duration)
+	if (ll == LogLevel::WITH_DUR
+		|| ll == LogLevel::ALL)
 	{
 		// Record the timing data from the TestResult
-		timing::hack tStart = timing::fromULLStr(aMsg.GetValue<std::string>("startTime"));
-		timing::hack tEnd = timing::fromULLStr(aMsg.GetValue<std::string>("endTime"));
+		timing::hack tStart = timing::fromULLStr(aMsg.Get("startTime"));
+		timing::hack tEnd = timing::fromULLStr(aMsg.Get("endTime"));
 		result += "\n   Duration: " + timing::FormatTimeString(timing::duration_us(tStart, tEnd));
 	}
 	result += "\n"; // append extra new lines for clarity

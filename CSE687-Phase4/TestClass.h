@@ -21,7 +21,7 @@
 #include <string>
 #include <functional>
 
-#include "utils.h"		// common utility functions and constants
+#include "utils.hpp"		// common utility functions and constants
 #include "TestResult.h"	// TestResult class
 
 
