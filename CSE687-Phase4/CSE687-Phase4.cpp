@@ -32,16 +32,24 @@ struct TestComponents {
     EndPoint clientEP;
     EndPoint serverEP;
     bool completed = 0;
-
+    LogLevel _logLevel;
 };
 
-void AddTestClient(std::vector<TestComponents> &tests) 
-{    
+std::vector<TestComponents> tests;
+
+
+void AddTestClient(std::vector<TestComponents>& tests) {
+
+
     TestComponents component;
     std::string testName{ "Leo" };
-    int choice, clientIP, serverIP{ 9890 }, confirm{ 0 };
+    int choice, clientIP, serverIP{ 9890 }, confirm{ 0 }, loglevel{ 0 };
 
     while (confirm == 0) {
+
+        std::cout << "TestName: ";
+        std::getline(std::cin, testName);
+        component.testName = testName;
 
         std::cout << "Choose DLL:\n";
         std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll" << std::endl;
@@ -53,24 +61,120 @@ void AddTestClient(std::vector<TestComponents> &tests)
         std::cin >> choice;
         component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
 
-        std::cout << "TestName: ";
-        std::cin >> testName;
-        component.testName = testName;
-        
+
         std::cout << "Client IP: ";
         std::cin >> clientIP;
         component.serverEP = EndPoint("localhost", serverIP);
         component.clientEP = EndPoint("localhost", (int)clientIP);
 
-        std::cout << "Would you like to save your changes? [YES = 1, NO = 0]";
+
+        std::cout << "Log level\n";
+        std::cout << "================\n";
+        std::cout << "1). Pass/Fail - Shows only fail or pass status\n";
+        std::cout << "2). Pass/Fail with message - Shows only fail or pass status with message log\n";
+        std::cout << "3). Pass/Fail - Shows only fail with test duration\n";
+        std::cout << "4). Pass/Fail With error message and test duration\n";
+        std::cin >> loglevel;
+
+        while (loglevel <= 0 && loglevel > 4) {
+            if (loglevel == 1) component._logLevel = LogLevel::STATUS_ONLY;
+            else if (loglevel == 2) component._logLevel = LogLevel::WITH_ERR;
+            else if (loglevel == 3) component._logLevel = LogLevel::WITH_DUR;
+            else if (loglevel == 4) component._logLevel = LogLevel::ALL;
+            else {
+                std::cout << "Invalid choice, please try again!\n";
+            }
+        }
+
+        std::cout << "Will you like to save your changes? [YES = 1, NO = 0]";
         std::cin >> confirm;
 
         std::cin.ignore();
     }
 
     tests.push_back(component);
+
+
     system("pause");
+
 }
+
+
+void EditTest(std::vector<TestComponents>& tests) {
+
+    int choice{ 0 };
+    std::cout << "\Edit TESTS\n**This action can not be undone\nTo exit, insert -1\n\n\n";
+
+    for (int x = 0; x < tests.size(); x++) {
+        std::cout << "[" << x + 1 << "]" <<
+            "Test Name: " << tests[x].testName << std::endl;
+    }
+
+    std::cout << "\n\nTest to Edit: (1 - " << tests.size() << "): ";
+    std::cin >> choice;
+
+
+    if (choice != -1) {
+
+        std::string testName{ "Leo" };
+        int clientIP, confirm{ 0 }, loglevel{ 0 };
+
+        // testing | ignore my horrible var
+
+        while (confirm == 0) {
+
+            std::cout << "TestName: ";
+            std::getline(std::cin, testName);
+            tests[choice].testName = testName;
+
+            std::cout << "Choose DLL:\n";
+            std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll" << std::endl;
+            std::cin >> choice;
+            tests[choice].dllName = (choice == 1) ? "LongRunTestDLL.dll" : "ShortRunTestDLL.dll";
+
+            std::cout << "Choose FuncName:\n";
+            std::cout << "1). LongRunTest  ||   2). ShortRunTest" << std::endl;
+            std::cin >> choice;
+            tests[choice].funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
+
+
+            std::cout << "Client IP: ";
+            std::cin >> clientIP;
+            tests[choice].clientEP = EndPoint("localhost", (int)clientIP);
+
+
+            std::cout << "Log level\n";
+            std::cout << "================\n";
+            std::cout << "1). Pass/Fail - Shows only fail or pass status\n";
+            std::cout << "2). Pass/Fail with message - Shows only fail or pass status with message log\n";
+            std::cout << "3). Pass/Fail - Shows only fail with test duration\n";
+            std::cout << "4). Pass/Fail With error message and test duration\n";
+            std::cin >> loglevel;
+
+            while (loglevel <= 0 && loglevel > 4) {
+                if (loglevel == 1) tests[choice]._logLevel = LogLevel::STATUS_ONLY;
+                else if (loglevel == 2) tests[choice]._logLevel = LogLevel::WITH_ERR;
+                else if (loglevel == 3) tests[choice]._logLevel = LogLevel::WITH_DUR;
+                else if (loglevel == 4) tests[choice]._logLevel = LogLevel::ALL;
+                else {
+                    std::cout << "Invalid choice, please try again!\n";
+                }
+            }
+
+            std::cout << "Will you like to save your changes? [YES = 1, NO = 0]";
+            std::cin >> confirm;
+
+            std::cin.ignore();
+        }
+
+
+
+
+    }
+    system("cls");
+
+}
+
 
 
 void RemoveTestClient(std::vector<TestComponents>& tests) {
@@ -80,14 +184,14 @@ void RemoveTestClient(std::vector<TestComponents>& tests) {
 
     for (int x = 0; x < tests.size(); x++) {
         std::cout << "[" << x + 1 << "]" <<
-        "Test Name: " << tests[x].testName << std::endl;
+            "Test Name: " << tests[x].testName << std::endl;
     }
 
     std::cout << "\n\nTest to remove: (1 - " << tests.size() << "): ";
     std::cin >> choice;
 
-    
-    if(choice != -1) {
+
+    if (choice != -1) {
         tests.erase(tests.begin() + (choice - 1));
     }
     system("cls");
@@ -102,11 +206,11 @@ void ViewTestClients(std::vector<TestComponents>& tests) {
 
     for (int x = 0; x < tests.size(); x++) {
         std::cout << "[" << x + 1 << "]" <<
-            "Test Name: "       << tests[x].testName        << " || " <<
-            "Dll Name: "        << tests[x].dllName         << " || " <<
-            "Func Name: "       << tests[x].funcName        << " || " <<
-            "Client Enpoint: "  << tests[x].clientEP.port   << " || " <<
-            "Completed: "       << tests[x].completed << std::endl;
+            "Test Name: " << tests[x].testName << " || " <<
+            "Dll Name: " << tests[x].dllName << " || " <<
+            "Func Name: " << tests[x].funcName << " || " <<
+            "Client Enpoint: " << tests[x].clientEP.port << " || " <<
+            "Completed: " << tests[x].completed << std::endl;
 
         std::cout << "====================================================================================================================\n\n";
     }
@@ -119,6 +223,7 @@ void ViewTestClients(std::vector<TestComponents>& tests) {
 
 void RunTestClients(std::vector<TestComponents>& tests) {
 
+    int choice{ 0 };
     std::cout << "\RUNNING TESTS\n\n\n";
 
     SocketSystem ss;
@@ -133,21 +238,30 @@ void RunTestClients(std::vector<TestComponents>& tests) {
     TestServer testServer = TestServer();
     testServer.StartServer();
 
+
     for (int x = 0; x < tests.size(); x++) {
 
-        TestClient testClient = TestClient(tests[x].testName, tests[x].clientEP, tests[x].serverEP);
-        testClient.SetOutputFile("_clientoutput.txt");
-        testClient.StartTest(tests[x].dllName, tests[x].funcName, LogLevel::ALL);
-        //testClient.StopTest();
+        if (tests[x].completed != 1) {
 
-        tests[x].completed = 1;
-
-        testClient.ReportResults();
+            TestClient testClient = TestClient(tests[x].testName, tests[x].clientEP, tests[x].serverEP);
+            testClient.SetOutputFile("_clientoutput.txt");
+            testClient.StartTest(tests[x].dllName, tests[x].funcName, tests[x]._logLevel);
+            tests[x].completed = 1;
+            testClient.ReportResults();
+        }
     }
 
-    testServer.StopServer();
+
+
     StaticLogger<1>::flush();
+    std::cout << "\n  press enter to quit test Harness";
+    _getche();
+
     system("pause");
+
+
+
+
 }
 
 
@@ -159,32 +273,32 @@ void ViewResults() {
 }
 
 
-void action(int choice, std::vector<TestComponents> &tests) {
+void action(int choice, std::vector<TestComponents>& tests) {
 
 
     switch (choice) {
-        case 1:
-            AddTestClient(tests);
-            break;
-        case 2:
-            RemoveTestClient(tests);
-            break;
-        case 3:
-            ViewTestClients(tests);
-            break;
-        case 4:
-            RunTestClients(tests);
-            break;
-        case 5:
-            exit(1);
-            break;
-        default:
-            std::cout << "Invalid Choice!" << std::endl;
+    case 1:
+        AddTestClient(tests);
+        break;
+    case 2:
+        RemoveTestClient(tests);
+        break;
+    case 3:
+        ViewTestClients(tests);
+        break;
+    case 4:
+        RunTestClients(tests);
+        break;
+    case 5:
+        exit(1);
+        break;
+    default:
+        std::cout << "Invalid Choice!" << std::endl;
     }
 }
 
 
-int Menu(const std::vector<TestComponents>& tests) {
+int Menu() {
 
     int choice{ 0 };
 
@@ -195,7 +309,7 @@ int Menu(const std::vector<TestComponents>& tests) {
         std::cout << "CSE687-Phase4\n";
         std::cout << "TestComponents: " << tests.size();
         std::cout << "\n\n========================\n\n";
-       
+
 
         std::cout << "Please select from the following options\n\n";
 
@@ -227,14 +341,15 @@ int Menu(const std::vector<TestComponents>& tests) {
 int main() {
 
     int choice{ 0 }; // holds user choice value
-    std::vector<TestComponents> tests;
 
     do {
 
-        choice = Menu(tests);
+        choice = Menu();
         action(choice, tests);
 
     } while (choice != 5);
+
+
 
     return 0;
 }
