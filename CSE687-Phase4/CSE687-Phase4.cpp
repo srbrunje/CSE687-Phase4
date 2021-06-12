@@ -54,7 +54,7 @@ void AddTestClient(std::vector<TestComponents> &tests)
         component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
 
         std::cout << "TestName: ";
-        std::getline(std::cin, testName);
+        std::cin >> testName;
         component.testName = testName;
         
         std::cout << "Client IP: ";
