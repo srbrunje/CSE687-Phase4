@@ -20,7 +20,7 @@
 
 // Prototypes
 int GetInt();
-int GetIntInBounds(const int aMin, const int aMax);
+int GetIntInBounds(const int aMin, const int aMax, const int aIgnore);
 void RunMenu();
 void UserSelection_1();
 void UserSelection_2();
@@ -39,12 +39,12 @@ typedef void (*Menu_Processing_Function_Ptr)(); // pointer to function
 
 // Our Test class data members
 struct TestComponents {
-	std::string testName;
-	std::string dllName;
-	std::string funcName;
-	EndPoint clientEP;
-	EndPoint serverEP;
-	bool completed = 0;
+    std::string testName;
+    std::string dllName;
+    std::string funcName;
+    EndPoint clientEP;
+    EndPoint serverEP;
+    bool completed = 0;
 };
 
 std::vector<TestComponents> tests; // contains all local tests
@@ -53,8 +53,8 @@ std::vector<TestComponents> tests; // contains all local tests
 // Contains our function and function titles
 struct Menu_Item_Attributes
 {
-	const char* text;
-	Menu_Processing_Function_Ptr p_processing_function;
+    const char* text;
+    Menu_Processing_Function_Ptr p_processing_function;
 };
 
 
@@ -107,21 +107,30 @@ void UserSelection_1() {
 // REMOVE TESTS
 void UserSelection_2() {
 
-    int choice{ 0 };
-    std::cout << "\nREMOVE TESTS\n**This action can not be undone\nTo exit, insert -1\n\n\n";
+    if (tests.size() > 0) {
 
-    for (int x = 0; x < tests.size(); x++) {
-        std::cout << "[" << x + 1 << "]" <<
-            "Test Name: " << tests[x].testName << std::endl;
+        int choice{ 0 };
+
+        std::cout << "\nREMOVE TESTS\n**This action can not be undone\nTo exit, insert -1\n\n\n";
+
+        for (int x = 0; x < tests.size(); x++)  std::cout << "[" << x + 1 << "]" << "Test Name: " << tests[x].testName << std::endl;
+
+        std::cout << "\n\nTest to remove: (1 - " << tests.size() << "): ";
+
+
+        choice = GetIntInBounds(-1, tests.size(), 0);
+
+
+        if (choice > 0) tests.erase(tests.begin() + (choice - 1));
+        
+
+    }
+    else {
+        std::cout << "There is no test to remove since no test have yet been created! Please create a test!\n";
+        system("pause");
     }
 
-    std::cout << "\n\nTest to remove: (1 - " << tests.size() << "): ";
-    std::cin >> choice;
 
-
-    if (choice != -1) {
-        tests.erase(tests.begin() + (choice - 1));
-    }
     system("cls");
 
 }
@@ -131,15 +140,20 @@ void UserSelection_3() {
 
     std::cout << "\nVIEW TESTS\n\n\n";
 
-    for (int x = 0; x < tests.size(); x++) {
-        std::cout << "[" << x + 1 << "]" <<
-            "Test Name: " << tests[x].testName << " || " <<
-            "Dll Name: " << tests[x].dllName << " || " <<
-            "Func Name: " << tests[x].funcName << " || " <<
-            "Client Enpoint: " << tests[x].clientEP.port << " || " <<
-            "Completed: " << tests[x].completed << std::endl;
+    if (tests.size() > 0) {
+        for (int x = 0; x < tests.size(); x++) {
+            std::cout << "[" << x + 1 << "]" <<
+                "Test Name: " << tests[x].testName << " || " <<
+                "Dll Name: " << tests[x].dllName << " || " <<
+                "Func Name: " << tests[x].funcName << " || " <<
+                "Client Enpoint: " << tests[x].clientEP.port << " || " <<
+                "Completed: " << tests[x].completed << std::endl;
 
-        std::cout << "====================================================================================================================\n\n";
+            std::cout << "====================================================================================================================\n\n";
+        }
+    }
+    else {
+        std::cout << "There has been no test created! Please create a test first in order for you to continue!\n\n";
     }
 
     system("pause");
@@ -209,9 +223,9 @@ void RunMenu() {
     Menu_Item_Attributes Quit = { "Exit Program", Exit };
 
     Menu_Item_Container menu = { {1, add}, {2, remove},{3, view},{4, run}, {5, Quit} };
-    int selection{0};
+    int selection{ 0 };
 
-           
+
     std::cout << "CSE687-Phase4\n";
     std::cout << "TestComponents: " << tests.size();
     std::cout << "\n\n========================\n\n";
@@ -224,10 +238,10 @@ void RunMenu() {
     }
 
 
-               
+
     std::cout << "Enter selection: ";
     selection = GetInt();
-           
+
     try {
         system("cls");
         Menu_Item_Attributes attributes = menu.at(selection);
@@ -239,7 +253,7 @@ void RunMenu() {
         //exit(1);
     }
 
-           
+
     // return selection;
 
 }
@@ -270,12 +284,12 @@ int GetInt()
     // If the input was empty or an invalid/out-of-range value was entered, return -1 as an error value
     return -1;
 }
-int GetIntInBounds(const int aMin, const int aMax)
+int GetIntInBounds(const int aMin, const int aMax, const int aIgnore)
 {
     // Safely retrieve a value from std::cin
     int in = GetInt();
     // Check if value retrieved was within bounds
-    while (in < aMin || in > aMax) {
+    while (in < aMin || in > aMax || in == aIgnore) {
         // If not within bounds, request a valid user input
         std::cout << "Please enter a valid option from "
             << aMin << " to " << aMax << ": ";
