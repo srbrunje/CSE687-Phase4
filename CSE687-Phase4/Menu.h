@@ -127,15 +127,15 @@ void RemoveTests() {
 
         std::cout << "\nREMOVE TESTS\n**This action can not be undone\nTo exit, insert -1\n\n\n";
 
-        for (int x = 0; x < tests.size(); x++)  std::cout << "[" << x + 1 << "]" << "Test Name: " << tests[x].testName << std::endl;
+        for (int x = 0; x < tests.size(); x++)  std::cout << "[" << x + 1 << "]" << "Test Name: " << tests[x].testName << std::endl; // displaying tests
 
         std::cout << "\n\nTest to remove: (1 - " << tests.size() << "): ";
 
-
+        // Params: LowerBound/HigherBound/Ignore
         choice = GetIntInBounds(-1, tests.size(), 0);
 
 
-        if (choice > 0) tests.erase(tests.begin() + (choice - 1));
+        if (choice > 0) tests.erase(tests.begin() + (choice - 1)); // if choice is to remove then proceed
 
 
     }
