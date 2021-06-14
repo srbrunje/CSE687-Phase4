@@ -149,39 +149,45 @@ void UserSelection_3() {
 // RUN TESTS
 void UserSelection_4() {
 
-    int choice{ 0 };
-    std::cout << "\RUNNING TESTS\n\n\n";
+    if (tests.size() > 0) {
 
-    SocketSystem ss;
-    SUtils::Title("Start Test");
-    Utilities::putline();
-    StaticLogger<1>::attach(&std::cout);
+        int choice{ 0 };
+        std::cout << "\RUNNING TESTS\n\n\n";
 
-    // Remove comment below to show extra details
-    //StaticLogger<1>::start();
+        SocketSystem ss;
+        SUtils::Title("Start Test");
+        Utilities::putline();
+        StaticLogger<1>::attach(&std::cout);
 
-    //start the server
-    TestServer testServer = TestServer();
-    testServer.StartServer();
+        // Remove comment below to show extra details
+        //StaticLogger<1>::start();
+
+        //start the server
+        TestServer testServer = TestServer();
+        testServer.StartServer();
 
 
-    for (int x = 0; x < tests.size(); x++) {
+        for (int x = 0; x < tests.size(); x++) {
 
-        TestClient testClient = TestClient(tests[x].testName, tests[x].clientEP, tests[x].serverEP);
-        testClient.SetOutputFile("_clientoutput.txt");
-        testClient.StartTest(tests[x].dllName, tests[x].funcName, LogLevel::Pass_Fail_with_error_message_and_test_duration);
-        testClient.StopTest();
+            TestClient testClient = TestClient(tests[x].testName, tests[x].clientEP, tests[x].serverEP);
+            testClient.SetOutputFile("_clientoutput.txt");
+            testClient.StartTest(tests[x].dllName, tests[x].funcName, LogLevel::Pass_Fail_with_error_message_and_test_duration);
+            testClient.StopTest();
 
-        tests[x].completed = 1;
+            tests[x].completed = 1;
 
-        testClient.ReportResults();
+            testClient.ReportResults();
+        }
+
+
+
+        StaticLogger<1>::flush();
+        std::cout << "\n  press enter to quit test Harness";
+        _getche();
     }
-
-
-
-    StaticLogger<1>::flush();
-    std::cout << "\n  press enter to quit test Harness";
-    _getche();
+    else {
+        std::cout << "There has been no test created! Please create a test first in order for you to continue!\n";
+    }
 
     system("pause");
 
