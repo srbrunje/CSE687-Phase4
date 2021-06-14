@@ -22,10 +22,10 @@
 int GetInt();
 int GetIntInBounds(const int aMin, const int aMax, const int aIgnore);
 void RunMenu();
-void UserSelection_1();
-void UserSelection_2();
-void UserSelection_3();
-void UserSelection_4();
+void AddTests();
+void RemoveTests();
+void ViewTests();
+void RunTests();
 void Exit();
 
 // NameSpaces
@@ -63,36 +63,50 @@ typedef std::map<unsigned int, Menu_Item_Attributes> Menu_Item_Container; // lis
 
 
 // ADD TESTS
-void UserSelection_1() {
+void AddTests() {
 
     TestComponents component;
     std::string testName{ "Leo" };
-    int choice, clientIP, serverIP{ 9890 }, confirm{ 0 };
+    int choice{-1}, clientIP, serverIP{ 9890 }, confirm{ 0 };
 
     while (confirm == 0) {
 
+        // Getting the test name
         std::cout << "TestName: ";
         std::getline(std::cin, testName);
         component.testName = testName;
 
-        std::cout << "Choose DLL:\n";
-        std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll" << std::endl;
-        std::cin >> choice;
-        component.dllName = (choice == 1) ? "LongRunTestDLL.dll" : "ShortRunTestDLL.dll";
 
-        std::cout << "Choose FuncName:\n";
-        std::cout << "1). LongRunTest  ||   2). ShortRunTest" << std::endl;
-        std::cin >> choice;
-        component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
+        while (choice == -1) {
+            // User choice of DLL
+            std::cout << "Choose DLL:\n";
+            std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll\n[Choice]: ";
 
+            choice = GetInt();
+            component.dllName = (choice == 1) ? "LongRunTestDLL.dll" : "ShortRunTestDLL.dll";
+        }
 
-        std::cout << "Client IP: ";
+        choice = -1;
+
+        while (choice == -1) {
+            // User choice of funcName
+            std::cout << "Choose FuncName:\n";
+            std::cout << "1). LongRunTest  ||   2). ShortRunTest\n[Choice]: ";
+
+            choice = GetInt();
+            component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
+        }
+
+        // User Port Number
+        std::cout << "Client Port: ";
         std::cin >> clientIP;
         component.serverEP = EndPoint("localhost", serverIP);
         component.clientEP = EndPoint("localhost", (int)clientIP);
 
+
+
         std::cout << "Will you like to save your changes? [YES = 1, NO = 0]";
-        std::cin >> confirm;
+        confirm = GetInt();
 
         std::cin.ignore();
     }
@@ -105,7 +119,7 @@ void UserSelection_1() {
 
 
 // REMOVE TESTS
-void UserSelection_2() {
+void RemoveTests() {
 
     if (tests.size() > 0) {
 
@@ -122,7 +136,7 @@ void UserSelection_2() {
 
 
         if (choice > 0) tests.erase(tests.begin() + (choice - 1));
-        
+
 
     }
     else {
@@ -136,7 +150,7 @@ void UserSelection_2() {
 }
 
 // VIEW TESTS
-void UserSelection_3() {
+void ViewTests() {
 
     std::cout << "\nVIEW TESTS\n\n\n";
 
@@ -161,7 +175,7 @@ void UserSelection_3() {
 }
 
 // RUN TESTS
-void UserSelection_4() {
+void RunTests() {
 
     if (tests.size() > 0) {
 
@@ -216,10 +230,10 @@ void Exit() {
 // RUN THE MENU
 void RunMenu() {
 
-    Menu_Item_Attributes add = { "Add Test", UserSelection_1 };
-    Menu_Item_Attributes remove = { "Remove Test", UserSelection_2 };
-    Menu_Item_Attributes view = { "View Tests", UserSelection_3 };
-    Menu_Item_Attributes run = { "Run Tests", UserSelection_4 };
+    Menu_Item_Attributes add = { "Add Test", AddTests };
+    Menu_Item_Attributes remove = { "Remove Test", RemoveTests };
+    Menu_Item_Attributes view = { "View Tests", ViewTests };
+    Menu_Item_Attributes run = { "Run Tests", RunTests };
     Menu_Item_Attributes Quit = { "Exit Program", Exit };
 
     Menu_Item_Container menu = { {1, add}, {2, remove},{3, view},{4, run}, {5, Quit} };
@@ -234,7 +248,7 @@ void RunMenu() {
     std::cout << "Please select from the following options\n\n";
 
     for (const auto& p : menu) {
-        std::cout << "m[" << p.first << "] = " << p.second.text << '\n';
+        std::cout << "[" << p.first << "] = " << p.second.text << '\n';
     }
 
 
@@ -275,10 +289,10 @@ int GetInt()
             return i;					// return the integer
         }
         catch (const std::invalid_argument& invalArg) { // thrown when containing non-numeric characters, etc.
-            std::cerr << "Error: " << invalArg.what() << " for string \'" << input << "\'\n";
+            std::cerr << "Error: " << invalArg.what() << " for string \'" << input << "\'\n\n";
         }
         catch (const std::out_of_range& outOfRng) {		// thrown when magnitude is too large for int type
-            std::cerr << "Error: " << outOfRng.what() << " for string \'" << input << "\'\n";
+            std::cerr << "Error: " << outOfRng.what() << " for string \'" << input << "\'\n\n";
         }
     }
     // If the input was empty or an invalid/out-of-range value was entered, return -1 as an error value
