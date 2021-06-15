@@ -80,21 +80,38 @@ void AddTests() {
         while (choice == -1) {
             // User choice of DLL
             std::cout << "Choose DLL:\n";
-            std::cout << "1). LongRunTestDLL.dll  ||   2). ShortRunTestDLL.dll\n[Choice]: ";
+	        std::cout << "1). LongRunTestDLL.dll  ||   2). MathDLL.dll\n[Choice]: ";
 
             choice = GetInt();
-            component.dllName = (choice == 1) ? "LongRunTestDLL.dll" : "ShortRunTestDLL.dll";
+            component.dllName = (choice == 1) ? "LongRunTestDLL.dll" : "MathDLL.dll";
         }
-
-        choice = -1;
-
-        while (choice == -1) {
-            // User choice of funcName
+		
+		if (choice == 1)
+        {
+			// User choice of funcName
             std::cout << "Choose FuncName:\n";
             std::cout << "1). LongRunTest  ||   2). ShortRunTest\n[Choice]: ";
-
             choice = GetInt();
             component.funcName = (choice == 1) ? "LongRunTest" : "ShortRunTest";
+        }
+        else
+        {
+            std::cout << "1). AddOK  ||   2). AddFail || 3). DivZero" << std::endl;
+            choice = GetInt();
+            switch (choice)
+            {
+            case 1:
+                component.funcName = "AddOK";
+                break;
+            case 2:
+                component.funcName = "AddFail";
+                break;
+            case 3:
+                component.funcName = "DivZero";
+                break;
+            default:
+                component.funcName = "AddOK";
+            }
         }
 
         // User Port Number
