@@ -66,6 +66,7 @@ public:
     void SetAuthor(const std::string& aAuthor);
     void SetTo(EndPoint aTo);
     void SetFrom(EndPoint aFrom);
+    void SwapAddressees();
     void SetTimestamp(const std::string& aTimeDateStr);
     void SetName(const std::string& aName);
     void SetDLL(const std::string& aDLLPath);
@@ -80,7 +81,7 @@ public:
         if (!bAppend) {                 // Overwriting
             _data[aKey] = aVal;
         }
-        else if (_data.contains(aKey)) {    // Appending to an array (if possible
+        else if (_data.contains(aKey)) {    // Appending to an array (if possible)
             if (!_data[aKey].is_array()) {
                 return false; // must be an array type
             }

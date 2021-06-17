@@ -10,8 +10,6 @@
 #include <functional>
 #include <algorithm>
 #include <conio.h>
-#include "TestManager.h"
-#include "ExampleTest.h"
 #include "ClientHandler.h"
 #include "TestServer.h"
 #include "TestClient.h"
@@ -44,6 +42,7 @@ struct TestComponents {
     std::string funcName;
     EndPoint clientEP;
     EndPoint serverEP;
+    LogLevel logLevel = LogLevel::ALL;
     bool completed = 0;
 };
 
@@ -120,12 +119,15 @@ void AddTests() {
         component.serverEP = EndPoint("localhost", serverIP);
         component.clientEP = EndPoint("localhost", (int)clientIP);
 
+        // Set log level
+        std::cout << "Choose Log Level:\n";
+        std::cout << "1). Status only || 2). With error message || 3). With timing data || 4). All\n[Choice]: ";
+        choice = GetIntInBounds(1, 4, 0) - 1; // minus 1 for zero-indexing
+        component.logLevel = (LogLevel)choice;
 
-
+        // Check for saving data
         std::cout << "Will you like to save your changes? [YES = 1, NO = 0]";
         confirm = GetInt();
-
-        std::cin.ignore();
     }
 
     tests.push_back(component);
@@ -178,9 +180,10 @@ void ViewTests() {
                 "Dll Name: " << tests[x].dllName << " || " <<
                 "Func Name: " << tests[x].funcName << " || " <<
                 "Client Enpoint: " << tests[x].clientEP.port << " || " <<
+                "Log Level: " << std::to_string((int)tests[x].logLevel) << " || " <<
                 "Completed: " << tests[x].completed << std::endl;
 
-            std::cout << "====================================================================================================================\n\n";
+            std::cout << "==============================================================================================================================\n\n";
         }
     }
     else {
@@ -193,49 +196,24 @@ void ViewTests() {
 
 // RUN TESTS
 void RunTests() {
-
     if (tests.size() > 0) {
-
         int choice{ 0 };
         std::cout << "\RUNNING TESTS\n\n\n";
 
-        SocketSystem ss;
-        SUtils::Title("Start Test");
-        Utilities::putline();
-        StaticLogger<1>::attach(&std::cout);
-
-        // Remove comment below to show extra details
-        //StaticLogger<1>::start();
-
-        //start the server
-        TestServer testServer = TestServer();
-        testServer.StartServer();
-
-
         for (int x = 0; x < tests.size(); x++) {
-
             TestClient testClient = TestClient(tests[x].testName, tests[x].clientEP, tests[x].serverEP);
             testClient.SetOutputFile("_clientoutput.txt");
-            testClient.StartTest(tests[x].dllName, tests[x].funcName, LogLevel::Pass_Fail_with_error_message_and_test_duration);
-            testClient.StopTest();
-
+            testClient.StartTest(tests[x].dllName, tests[x].funcName, tests[x].logLevel);
             tests[x].completed = 1;
-
             testClient.ReportResults();
         }
-
-
-
-        StaticLogger<1>::flush();
         std::cout << "\n  press enter to quit test Harness";
-        _getche();
     }
     else {
         std::cout << "There has been no test created! Please create a test first in order for you to continue!\n";
     }
 
     system("pause");
-
 }
 
 // EXIT PROGRAM
@@ -291,10 +269,7 @@ void RunMenu() {
 
 
 
-/// <summary>
-/// ZACH DEMERS IMPLEMENTATION OF SANITY CHECKS
-/// </summary>
-/// <returns></returns>
+// Methods for safe input collection
 int GetInt()
 {
     std::string input;				// initialize string for input storage

@@ -36,12 +36,6 @@
     <ClCompile Include="TestLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,12 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestLogger.h">
@@ -71,9 +59,6 @@
     <ClInclude Include="Message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExampleTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Comm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

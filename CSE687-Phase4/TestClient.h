@@ -9,26 +9,21 @@
 #include <functional>
 #include <algorithm>
 #include <conio.h>
-#include "TestManager.h"
-#include "ExampleTest.h"
 #include "ClientHandler.h"
+#include "TestLogger.h"
 
 
 class TestClient
 {
 public:
 	TestClient(const std::string clientName, const EndPoint clientEP, const EndPoint serverEP);
-
-	void SetClientName(const std::string name);
-
-	std::string GetClientName();
-
+	
+	void SetName(const std::string name);
+	void SetEndpoint(const EndPoint endPoint);
 	void SetServerEndpoint(const EndPoint endPoint);
 
-	void SetClientEndpoint(const EndPoint endPoint);
-
-	EndPoint GetClientEndPoint();
-
+	std::string GetClientName();
+	EndPoint GetEndPoint();
 	EndPoint GetServerEndPoint();
 
 	bool SetOutputFile(const std::string& aFilePath);
@@ -36,42 +31,17 @@ public:
 	void SetOutputStream(std::ostream& aStream);
 	void SetOutputToStream(const bool bOutput);
 
-	void SetDllName(std::string& aDllName);
-	void SetFuncName(std::string& aFuncName);
-	void SetLogLevel(const LogLevel aLogLevel);
-
-
-	void StartTest(const std::string& aTestName, const LogLevel aLogLevel);
-
 	void StartTest(const std::string& aDLLName, const std::string& aFuncName, const LogLevel aLogLevel);
-
-	void StopTest();
-
-	
 	void ReportResults();
 
-	private:
-		void StartListenerThread();
+private:
+	void StartListenerThread();
 
-		void ProcessReplies();
-
-		std::string _myName;
-		EndPoint::Port _myPort;
-
-		int _numMsgsSent;
-		BlockingQueue<Message> _msgsRcvd;
-
-		TestLogger _lgr;
-
-		EndPoint _clientEP;
-		EndPoint _txEP;
-		EndPoint _serverEP;
-
-		MsgPassingCommunication::Comm* comm;
-
-		std::string _dllName;
-		std::string _funcName;
-		LogLevel _loglevel;
-
+	std::string _name;
+	EndPoint _EP;
+	EndPoint _serverEP;
+	int _numMsgsSent;
+	BlockingQueue<Message> _msgsRcvd;
+	TestLogger _logger;
 };
 

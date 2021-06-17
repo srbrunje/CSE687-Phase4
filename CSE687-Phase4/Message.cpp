@@ -42,6 +42,12 @@ void Message::SetFrom(EndPoint aFrom)
     _data["from"]["address"] = aFrom.address;
     _data["from"]["port"] = aFrom.port;
 }
+void Message::SwapAddressees()
+{
+    EndPoint to = GetTo();
+    SetTo(GetFrom());
+    SetFrom(to);
+}
 void Message::SetTimestamp(const std::string& aTimeDateStr)
 {
     if (aTimeDateStr.empty()) {

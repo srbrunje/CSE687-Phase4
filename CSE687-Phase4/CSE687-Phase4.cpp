@@ -4,10 +4,16 @@
 
 
 int main() {
+    SocketSystem ss;
+    TestServer testServer = TestServer();
+    testServer.StartServer();
 
     while (true) {
         RunMenu();
         system("cls");
     }
+
+    testServer.StopServer();
+
     return 0;
 }

@@ -29,8 +29,31 @@ enum class LogLevel
 
 // Enum class to define the status of a test's result
 enum class ResultStatus {
-    PASS, FAIL, FAIL_ERR, NOT_RUN
+    PASS, 
+    FAIL, 
+    FAIL_ERR, 
+    FAIL_LOAD,
+    NOT_RUN
 };
+
+static std::string StatusToString(const ResultStatus status)
+{
+    switch (status)
+    {
+    case ResultStatus::PASS:
+        return "PASS";
+    case ResultStatus::FAIL:
+        return "FAIL";
+    case ResultStatus::FAIL_ERR:
+        return "FAIL WITH EXCEPTION";
+    case ResultStatus::FAIL_LOAD:
+        return "FAILED TO LOAD DLL/FUNCTION";
+    case ResultStatus::NOT_RUN:
+        return "NOT RUN";
+    default:
+        return "INVALID";
+    }
+}
 
 
 /* DblToStr - public
@@ -119,8 +142,14 @@ namespace timing {
     }
     static hack fromULLStr(const std::string& ticks)
     {
-        ull st = std::stoull(ticks, 0, 0);
-        return fromULL(st);
+        try {
+            ull st = std::stoull(ticks, 0, 0);
+            return fromULL(st);
+        }
+        catch (const std::exception& e) {
+            // stoull needs a number string, no characters/empty/etc.
+        }
+        return timing::hack();
     }
 
 

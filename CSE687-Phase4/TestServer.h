@@ -8,16 +8,14 @@
 #include <functional>
 #include <algorithm>
 #include <conio.h>
-#include "TestManager.h"
-#include "ExampleTest.h"
 #include "ClientHandler.h"
+#include "TestClass.h"
 
 class TestServer
 {
 public:
 	TestServer();
 
-	void InitilizeTestServer();
 	void StartServer();
 	void StopServer(const bool bHard = false);
 
@@ -25,10 +23,10 @@ public:
 	const Port PORT = 9890;
 
 private:
-
-	TestManager _mgr;
+	std::vector<TestClass> _tests;
 	int _numMsgsSent;
 	BlockingQueue<Message> _msgsRcvd;
 	std::atomic<bool> _shutdown;
+	std::mutex _mtx;
 };
 

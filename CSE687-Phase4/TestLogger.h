@@ -50,7 +50,6 @@ public:
 	std::ostream* GetOutputStream() const;
 
 	// Support Functions
-	bool LogResult(const TestResult& aTestResultPtr);
 	bool LogResult(const Message& aMsg);
 	bool LogMessage(const std::string& aMessage);
 	void ClearContents();

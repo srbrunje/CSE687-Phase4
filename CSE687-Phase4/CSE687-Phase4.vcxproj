@@ -148,8 +148,6 @@
     <ClCompile Include="TestClass.cpp" />
     <ClCompile Include="TestClient.cpp" />
     <ClCompile Include="TestLogger.cpp" />
-    <ClCompile Include="TestManager.cpp" />
-    <ClCompile Include="TestResult.cpp" />
     <ClCompile Include="TestServer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,14 +164,12 @@
   <ItemGroup>
     <ClInclude Include="ClientHandler.h" />
     <ClInclude Include="Comm.h" />
-    <ClInclude Include="ExampleTest.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestClient.h" />
     <ClInclude Include="TestLogger.h" />
-    <ClInclude Include="TestManager.h" />
-    <ClInclude Include="TestResult.h" />
     <ClInclude Include="TestServer.h" />
     <ClInclude Include="utils.hpp" />
   </ItemGroup>
